@@ -410,7 +410,7 @@ RedisClient.prototype.on_error = function (err) {
 
     // Only emit the error if the retry_stategy option is not set
     // this.options.emitOnRetry
-    if (!this.options.emitOnRetry /*!this.options.retry_strategy*/) {
+    if (this.options.emitOnRetry /*!this.options.retry_strategy*/) {
         this.emit('error', err);
     }
     // 'error' events get turned into exceptions if they aren't listened for. If the user handled this error
