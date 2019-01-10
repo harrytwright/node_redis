@@ -105,6 +105,9 @@ function RedisClient (options, stream) {
         options.socket_initialdelay = 0;
         // set default to 0, which is aligned to https://nodejs.org/api/net.html#net_socket_setkeepalive_enable_initialdelay
     }
+    if (options.emitOnRetry === undefined) {
+        this.emitOnRetry = false;
+    }
     for (var command in options.rename_commands) {
         options.rename_commands[command.toLowerCase()] = options.rename_commands[command];
     }
@@ -406,7 +409,8 @@ RedisClient.prototype.on_error = function (err) {
     this.ready = false;
 
     // Only emit the error if the retry_stategy option is not set
-    if (!this.options.retry_strategy) {
+    // this.options.emitOnRetry
+    if (!this.options.emitOnRetry /*!this.options.retry_strategy*/) {
         this.emit('error', err);
     }
     // 'error' events get turned into exceptions if they aren't listened for. If the user handled this error
